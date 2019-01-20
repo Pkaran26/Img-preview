@@ -46,6 +46,9 @@
             <h4 class="card-title">Choose image</h4>
             <input type='file' id="imgInp" class="form-control" />
             <button type="button" style="margin-top:10px;" id="uploadAll" class="btn btn-primary">Upload All</button>
+            <span class="text-info">Panding: 0</span>
+            <span class="text-success">Uploaded: 0</span>
+            <span class="text-danger">Failed: 0</span>
           </div>
         </div>
       </div>
@@ -67,19 +70,20 @@
     if (input.files && input.files[0]) {
       var reader = new FileReader();
       reader.onload = function(e) {
+        if(e.target.result.length>5)
         imgs.push({
           'name': input.files[0].name,
           'url': e.target.result
         });
         console.log(imgs);
-        $('#preview').append('<div class="col-lg-4 col-md-4"><div class="card bg-light"><div class="card-body"><img style="width:100%" src="'+e.target.result+'" /></div><div style="padding:5px;text-align:center" class="card-footer"><span style="font-size:14px;" class="badge badge-dark">'+input.files[0].name+'</span></div></div><br/></div>');
-        //
-      //  $('#blah').attr('src', e.target.result);
+        $('#preview').append('<div class="col-lg-3 col-md-3 col-xs-6"><div class="card bg-light"><div class="card-body"><img style="width:100%" src="'+e.target.result+'" /></div><div style="padding:5px;text-align:center" class="card-footer"><span class="badge badge-dark">'+input.files[0].name+'</span></div></div><br/></div>');
+        let imglen = imgs.length;
+        $('.text-info').text("Panding: "+imglen);
+        if (imglen>-1){
+          uploadAll.prop('disabled', false);
+        }
       }
       reader.readAsDataURL(input.files[0]);
-      if (imgs.length>-1){
-        uploadAll.prop('disabled', false);
-      }
     }
   }
 $("#imgInp").change(function() {
@@ -87,14 +91,23 @@ $("#imgInp").change(function() {
 });
 
 uploadAll.click(function(){
+  let imglen = imgs.length;
+  let success = 0;
+  let val = 0;
+  $('.text-info').text("Panding: "+imglen);
   $(this).prop('disabled', true);
-  for(i=0;i<=imgs.length;i++){
-    $.post('http://localhost/Img%20preview/upload.php',{'name': imgs[i].name, 'url': imgs[i].url}, function(data){
-      console.log(data);
+  $.each(imgs, function(i, v){
+    --imglen;
+    $('.text-info').text("Panding: "+imglen);
+    $.post('http://localhost/Img%20preview/upload.php',{'name': v.name, 'url': v.url}, function(data){
+      ++success;
+      $('.text-success').text("Uploaded: "+(success));
     }).fail(function(){
       console.log('error');
+      ++val;
+      $('.text-danger').text("Failed: "+(val));
     });
-  }
+  })
 });
   </script>
 </body>

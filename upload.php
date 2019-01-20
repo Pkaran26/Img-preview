@@ -18,7 +18,7 @@ function base64_to_jpeg($base64_string, $output_file) {
     // clean up the file resource
     fclose( $ifp );
 
-    return $output_file;
+    return true;
 }
 
 ?>

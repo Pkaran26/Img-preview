@@ -64,7 +64,7 @@
         let obj = JSON.parse(data);
         console.log(obj);
         for(i=0;i<obj.length;i++){
-          $('#preview').append('<div class="col-lg-4 col-md-4"><div class="card bg-light"><div class="card-body"><img style="width:100%" src="'+obj[i].url+'" /></div><div style="padding:5px;text-align:center" class="card-footer"><span style="font-size:14px;" class="badge badge-dark">'+obj[i].name+'</span></div></div><br/></div>');
+          $('#preview').append('<div class="col-lg-3 col-md-3 col-xs-6"><div class="card bg-light"><div class="card-body"><img style="width:100%" src="'+obj[i].url+'" /></div><div style="padding:5px;text-align:center" class="card-footer"><span class="badge badge-dark">'+obj[i].name+'</span></div></div><br/></div>');
         }
         $('.card-title span').text('(Total '+obj.length+' images)');
       });
