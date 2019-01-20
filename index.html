@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Preview</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css"/>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <a class="navbar-brand" href="#">Image Preview</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarColor01">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+  <div class="container" style="margin-top:50px;">
+    <div class="row">
+      <div class="col-lg-4 col-md-4"></div>
+      <div class="col-lg-4 col-md-4">
+        <div class="card bg-light">
+          <div class="card-body">
+            <form id="form1">
+              <h4 class="card-title">Choose image</h4>
+              <input type='file' id="imgInp" class="form-control" />
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br/>
+    <div class="row" id="preview">
+
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script>
+  let imgs = [];
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        imgs.push({
+          'name': input.files[0].name,
+          'url': e.target.result
+        });
+        console.log(imgs);
+        $('#preview').append('<div class="col-lg-4 col-md-4"><div class="card bg-light"><div class="card-body"><img style="width:100%" src="'+e.target.result+'" /></div><div style="padding:5px;text-align:center" class="card-footer"><span style="font-size:14px;" class="badge badge-dark">'+input.files[0].name+'</span></div></div><br/></div>');
+        //
+      //  $('#blah').attr('src', e.target.result);
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+$("#imgInp").change(function() {
+  readURL(this);
+});
+  </script>
+</body>
+</html>
