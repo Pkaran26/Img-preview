@@ -28,11 +28,11 @@
 
   <div class="collapse navbar-collapse" id="navbarColor01">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
-      </li>
       <li class="nav-item">
-        <a class="nav-link" href="uploaded.html">Uploaded Images</a>
+        <a class="nav-link" href="index.html">Home</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="uploaded.html">Uploaded Images <span class="sr-only">(current)</span></a>
       </li>
     </ul>
   </div>
@@ -43,9 +43,8 @@
       <div class="col-lg-4 col-md-4">
         <div class="card bg-light">
           <div class="card-body">
-            <h4 class="card-title">Choose image</h4>
-            <input type='file' id="imgInp" class="form-control" />
-            <button type="button" style="margin-top:10px;" id="uploadAll" class="btn btn-primary">Upload All</button>
+            <h4 class="card-title">Uploaded images <span class="text-info" style="font-size:12px"></span></h4>
+            <button type="button" onclick="javascript:getImages()" class="btn btn-primary">Refresh</button>
           </div>
         </div>
       </div>
@@ -59,43 +58,18 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   <script>
-  let imgs = [];
-  let uploadAll = $('#uploadAll');
-  uploadAll.prop('disabled', true);
-
-  let readURL = function(input) {
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        imgs.push({
-          'name': input.files[0].name,
-          'url': e.target.result
-        });
-        console.log(imgs);
-        $('#preview').append('<div class="col-lg-4 col-md-4"><div class="card bg-light"><div class="card-body"><img style="width:100%" src="'+e.target.result+'" /></div><div style="padding:5px;text-align:center" class="card-footer"><span style="font-size:14px;" class="badge badge-dark">'+input.files[0].name+'</span></div></div><br/></div>');
-        //
-      //  $('#blah').attr('src', e.target.result);
-      }
-      reader.readAsDataURL(input.files[0]);
-      if (imgs.length>-1){
-        uploadAll.prop('disabled', false);
-      }
+    let getImages = function(){
+      $.get('http://localhost/Img preview/readfile.php', function(data){
+        $('#preview').empty();
+        let obj = JSON.parse(data);
+        console.log(obj);
+        for(i=0;i<obj.length;i++){
+          $('#preview').append('<div class="col-lg-4 col-md-4"><div class="card bg-light"><div class="card-body"><img style="width:100%" src="'+obj[i].url+'" /></div><div style="padding:5px;text-align:center" class="card-footer"><span style="font-size:14px;" class="badge badge-dark">'+obj[i].name+'</span></div></div><br/></div>');
+        }
+        $('.card-title span').text('(Total '+obj.length+' images)');
+      });
     }
-  }
-$("#imgInp").change(function() {
-  readURL(this);
-});
-
-uploadAll.click(function(){
-  $(this).prop('disabled', true);
-  for(i=0;i<=imgs.length;i++){
-    $.post('http://localhost/Img%20preview/upload.php',{'name': imgs[i].name, 'url': imgs[i].url}, function(data){
-      console.log(data);
-    }).fail(function(){
-      console.log('error');
-    });
-  }
-});
+    getImages();
   </script>
 </body>
 </html>
