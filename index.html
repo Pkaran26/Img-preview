@@ -70,17 +70,21 @@
     if (input.files && input.files[0]) {
       var reader = new FileReader();
       reader.onload = function(e) {
-        if(e.target.result.length>5)
-        imgs.push({
-          'name': input.files[0].name,
-          'url': e.target.result
-        });
-        console.log(imgs);
-        $('#preview').append('<div class="col-lg-3 col-md-3 col-xs-6"><div class="card bg-light"><div class="card-body"><img style="width:100%" src="'+e.target.result+'" /></div><div style="padding:5px;text-align:center" class="card-footer"><span class="badge badge-dark">'+input.files[0].name+'</span></div></div><br/></div>');
-        let imglen = imgs.length;
-        $('.text-info').text("Panding: "+imglen);
-        if (imglen>-1){
-          uploadAll.prop('disabled', false);
+        let url = "";
+        if(e.target.result.length>5){
+          imgs.push({
+            'name': input.files[0].name,
+            'url': e.target.result
+          });
+          console.log(imgs);
+          $('#preview').append('<div class="col-lg-3 col-md-3 col-xs-6"><div class="card bg-light"><div class="card-body"><img style="width:100%" src="'+e.target.result+'" /></div><div style="padding:5px;text-align:center" class="card-footer"><span class="badge badge-dark">'+input.files[0].name+'</span></div></div><br/></div>');
+          let imglen = imgs.length;
+          $('.text-info').text("Panding: "+imglen);
+          if (imglen>-1){
+            uploadAll.prop('disabled', false);
+          }
+        }else{
+          alert('invalid file');
         }
       }
       reader.readAsDataURL(input.files[0]);
@@ -109,6 +113,29 @@ uploadAll.click(function(){
     });
   })
 });
+/*$(function() {
+
+    var bar = $('.bar');
+    var percent = $('.percent');
+    var status = $('#status');
+
+    $('form').ajaxForm({
+        beforeSend: function() {
+            status.empty();
+            var percentVal = '0%';
+            bar.width(percentVal);
+            percent.html(percentVal);
+        },
+        uploadProgress: function(event, position, total, percentComplete) {
+            var percentVal = percentComplete + '%';
+            bar.width(percentVal);
+            percent.html(percentVal);
+        },
+        complete: function(xhr) {
+            status.html(xhr.responseText);
+        }
+    });
+}); */
   </script>
 </body>
 </html>
